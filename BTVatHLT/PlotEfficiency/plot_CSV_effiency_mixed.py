@@ -2,11 +2,12 @@
 import ROOT as rt
 import CMS_lumi, tdrstyle
 import array
+import sys
 
 #set the tdr style
 tdrstyle.setTDRStyle()
 
-file = rt.TFile("results2017C_mixed_test.root","READ")
+file = rt.TFile(sys.argv[1],"READ")
 
 #change the CMS_lumi variables (see CMS_lumi.py)
 CMS_lumi.lumi_7TeV = "4.8 fb^{-1}"
@@ -65,7 +66,7 @@ h.Draw()
 data1 = file.Get("eff_csv_inc_calo")
 data2 = file.Get("eff_csv_inc_pf")
 
-MC   = file.Get("h_csvafterfilterlog")
+#MC   = file.Get("h_csvafterfilterlog")
 
 #MC.Draw("histsame")
 data1.SetMarkerStyle(20)

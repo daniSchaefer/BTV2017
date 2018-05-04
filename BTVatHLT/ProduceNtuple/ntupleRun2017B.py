@@ -2,12 +2,12 @@ from launchNtupleFromAOD2017 import launchNtupleFromAOD2017
 
 maxevents=50000
 fileOutput = 'ntupleTest2017BTuned_2017_07_11_50k.root'
-filesInput=['root://cms-xrd-global.cern.ch//store/data/Run2017B/BTagCSV/AOD/PromptReco-v1/000/297/722/00000/008316A9-CF5E-E711-8B52-02163E0145AA.root',
-            'root://cms-xrd-global.cern.ch//store/data/Run2017B/BTagCSV/AOD/PromptReco-v1/000/297/722/00000/70C23A78-C85E-E711-99F5-02163E01A3F0.root',
-            'root://cms-xrd-global.cern.ch//store/data/Run2017B/BTagCSV/AOD/PromptReco-v1/000/297/722/00000/8CC1BE7D-CE5E-E711-A921-02163E019E5B.root',
-            'root://cms-xrd-global.cern.ch//store/data/Run2017B/BTagCSV/AOD/PromptReco-v1/000/297/722/00000/90BE6EB2-E85E-E711-8106-02163E01341F.root',
-            'root://cms-xrd-global.cern.ch//store/data/Run2017B/BTagCSV/AOD/PromptReco-v1/000/297/722/00000/C0B0508F-E95E-E711-BCB9-02163E01A50C.root',
-            'root://cms-xrd-global.cern.ch//store/data/Run2017B/BTagCSV/AOD/PromptReco-v1/000/297/722/00000/D8DE0484-CD5E-E711-9D16-02163E01A3DB.root'
+filesInput=[#'root://cms-xrd-global.cern.ch//store/data/Run2017B/BTagCSV/AOD/PromptReco-v1/000/297/722/00000/008316A9-CF5E-E711-8B52-02163E0145AA.root',
+            'root://cms-xrd-global.cern.ch//store/data/Run2017D/BTagCSV/AOD/17Nov2017-v1/50000/3462B498-75EA-E711-8978-A4BF0112BDA8.root',
+            #'root://cms-xrd-global.cern.ch//store/data/Run2017B/BTagCSV/AOD/PromptReco-v1/000/297/722/00000/8CC1BE7D-CE5E-E711-A921-02163E019E5B.root',
+            #'root://cms-xrd-global.cern.ch//store/data/Run2017B/BTagCSV/AOD/PromptReco-v1/000/297/722/00000/90BE6EB2-E85E-E711-8106-02163E01341F.root',
+            #'root://cms-xrd-global.cern.ch//store/data/Run2017B/BTagCSV/AOD/PromptReco-v1/000/297/722/00000/C0B0508F-E95E-E711-BCB9-02163E01A50C.root',
+            #'root://cms-xrd-global.cern.ch//store/data/Run2017B/BTagCSV/AOD/PromptReco-v1/000/297/722/00000/D8DE0484-CD5E-E711-9D16-02163E01A3DB.root'
             # 'root://cms-xrd-global.cern.ch//store/data/Run2017B/BTagCSV/AOD/PromptReco-v1/000/297/675/00000/348070F8-725E-E711-9FEA-02163E019BBD.root',
             # 'root://cms-xrd-global.cern.ch//store/data/Run2017B/BTagCSV/AOD/PromptReco-v1/000/297/675/00000/4A40BA34-765E-E711-ABCF-02163E0144BE.root',
             # 'root://cms-xrd-global.cern.ch//store/data/Run2017B/BTagCSV/AOD/PromptReco-v1/000/297/675/00000/C00B86D3-795E-E711-86C9-02163E011F67.root',

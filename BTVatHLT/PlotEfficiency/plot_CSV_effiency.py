@@ -1,6 +1,7 @@
 import ROOT as rt
 import CMS_lumi, tdrstyle
 import array
+import sys
 
 #set the tdr style
 tdrstyle.setTDRStyle()
@@ -66,7 +67,7 @@ yAxis.SetTitleOffset(1)
 
 h.Draw()
 
-file = rt.TFile("results2017B_PF.root","READ")
+file = rt.TFile(sys.argv[1],"READ")
 data = file.Get("h_csvafterfilterlog")
 MC   = file.Get("h_csvafterfilterlog")
 

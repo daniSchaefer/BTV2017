@@ -12,7 +12,7 @@ from numpy import arange, sin, pi
 def main() :
 
     # Files
-    f_ntuple            = ROOT.TFile("ntupleTest2017BTuned.root",    	 "READ")
+    f_ntuple            = ROOT.TFile(sys.argv[1],    	 "READ")
     f_results           = ROOT.TFile("results2017B.root",     	     "RECREATE")
     f_results.cd()
 

@@ -7,32 +7,72 @@ from ROOT import TH1F, TH2F, TEfficiency
 from matplotlib.pyplot import figure, show
 from numpy import arange, sin, pi
 
-# Performances of the PF online b-tagging sequence based on events triggered by HLT_PFHT300PT30_QuadPFJet_75_60_45_40, and studying the CSV cut of the HLT_PFHT300PT30_QuadPFJet_75_60_45_40_TriplePFBTagCSV_3p0
+
+
+def SelectTrigger(event,triggerpath,base=False,btagsequence="Calo",njet=-1):
+    # Performances of the PF online b-tagging sequence based on events triggered by HLT_PFHT300PT30_QuadPFJet_75_60_45_40, and studying the CSV cut of the HLT_PFHT300PT30_QuadPFJet_75_60_45_40_TriplePFBTagCSV_3p0
+    if triggerpath.find("HLT_PFHT300PT30_QuadPFJet_75_60_45_40")!=-1:
+        if base:
+            if event.HLT_PFHT300PT30_QuadPFJet_75_60_45_40 : return True
+            else: return False
+        if not base and njet==-1:
+            print "if not base trigger, the number of the jet under current consideratio has to be given!"
+            return 0
+        if not base:
+            if btagsequence.find("Calo")!=-1:
+                if event.caloJet_hltBTagCaloCSVp05Double[njet]: return True
+                else: return False
+            else:
+                if event.pfJet_hltBTagPFCSVp070Triple[njet]:return True
+                else:return False
+    # Performances studes for the b-tagging sequence based on events triggered by 
+    #HLT_PFHT430_SixJet40
+    #HLT_PFHT430_SixJet40_BTagCSV_p080_v1
+    #this is a trigger that only uses PF jets to run the b-tagging sequence on!
+    if triggerpath.find("HLT_PFHT430_SixJet40")!=-1:
+        if base:
+            if event.HLT_PFHT430_SixPFJet40 : return True
+            else: return False
+        if not base and njet==-1:
+            print "if not base trigger, the number of the jet under current consideratio has to be given!"
+            return 0
+        if not base:
+            if btagsequence.find("Calo")!=-1:
+                return False
+            else:
+                if event.pfJet_hltBTagPFCSVp080Single[njet]:return True
+                else:return False
+    else:
+        print "trigger path not found!"
+        return 0
+                
+            
+
+
 
 def main() :
-
+    triggerpath="HLT_PFHT300PT30_QuadPFJet_75_60_45_40"
+    triggerpath="HLT_PFHT430_SixJet40"
     # Files
-    f_ntuple            = ROOT.TFile("ntupleTest2017C_2017_08_17_50k.root",    	 "READ")
-    f_results           = ROOT.TFile("results2017C_mixed_test.root", 	     "RECREATE")
+    f_ntuple            = ROOT.TFile(sys.argv[1], "READ")
+    f_results           = ROOT.TFile(sys.argv[2], "RECREATE")
     f_results.cd()
 
     # Functions
-    makePlots(f_ntuple,  f_results)
+    makePlots(f_ntuple,  f_results,triggerpath)
 
-def makePlots(f_ntuple, f_results) :
+def makePlots(f_ntuple, f_results, triggerpath) :
 
     t = f_ntuple.Get("tree")
     print "Tree extracted..."
 
     h_csv_inc_4Calo     = TH1F("h_csv_inc_4Calo",    		"h_csv_inc_4Calo",     	50,  0,  1)
     h_csv_inc_4PF      	= TH1F("h_csv_inc_4PF",    		"h_csv_inc_4PF",     	50,  0,  1)
-    # h_csv_inc      	= TH1F("h_csv_inc",    		"h_csv_inc",     	50,  0,  1)
     h_csv_afcalo       	= TH1F("h_csv_afcalo",  	"h_csv_afcalo",      	50,  0,  1)
     h_csv_afpf		= TH1F("h_csv_afpf",		"h_csv_afpf",		50,  0,  1)
 
     h_csv_inc_log_4Calo     = TH1F("h_csv_inc_log_4Calo",    		"h_csv_inc_log_4Calo",     	50,  0,  7)
     h_csv_inc_log_4PF       = TH1F("h_csv_inc_log_4PF",    		"h_csv_inc_log_4PF",     	50,  0,  7)
-    # h_csv_inc_log      	= TH1F("h_csv_inc_log",    	"h_csv_inc_log",     	50,  0,  7)
     h_csv_afcalo_log	= TH1F("h_csv_afcalo_log",  	"h_csv_afcalo_log",	50,  0,  7)
     h_csv_afpf_log	= TH1F("h_csv_afpf_log",	"h_csv_afpf_log",	50,  0,  7)
 
@@ -61,7 +101,7 @@ def makePlots(f_ntuple, f_results) :
 	print "New event --------"
 	print
         
-        if not event.HLT_PFHT300PT30_QuadPFJet_75_60_45_40 : continue
+        if not SelectTrigger(event,triggerpath,True) : continue
 
 	print "CALO JET SECTION : # calo jet = ", event.caloJet_num
 	for i in range(0, event.caloJet_num-1) :	
@@ -80,7 +120,7 @@ def makePlots(f_ntuple, f_results) :
 			h_csv_inc_4Calo.Fill( 			event.offJet_csv[ event.caloJet_offmatch[i] ] )
                         if event.offJet_csv[ event.caloJet_offmatch[i] ] < 1. :
                             h_csv_inc_log_4Calo.Fill( 		-math.log( 1 -	event.offJet_csv[ event.caloJet_offmatch[i] ] ) )
-			if event.caloJet_hltBTagCaloCSVp05Double[i] :
+			if SelectTrigger(event,triggerpath,False,"Calo",i) :
                                 passed = True
 				print "passes calo filter", event.offJet_csv[  event.caloJet_offmatch[i] ]
 				h_csv_afcalo.Fill(			event.offJet_csv[ event.caloJet_offmatch[i] ] )
@@ -90,6 +130,7 @@ def makePlots(f_ntuple, f_results) :
                                     h_csv_inc_calo_log.Fill( -math.log( 1 -   event.offJet_csv[ event.caloJet_offmatch[i] ] ) )
 
                         eff_csv_inc_calo.Fill(passed, event.offJet_csv[ event.caloJet_offmatch[i] ] )
+                        
 
 	print "PF JET SECTION : # pf jet = ", event.pfJet_num
 	for i in range(0, event.pfJet_num-1) :	
@@ -108,7 +149,7 @@ def makePlots(f_ntuple, f_results) :
 			h_csv_inc_4PF.Fill( 			event.offJet_csv[ event.pfJet_offmatch[i] ] )
                         if event.offJet_csv[ event.pfJet_offmatch[i] ] < 1. :
                             h_csv_inc_log_4PF.Fill( 		-math.log( 1 -	event.offJet_csv[ event.pfJet_offmatch[i] ] ) )
-			if event.pfJet_hltBTagPFCSVp070Triple[i] :
+			if SelectTrigger(event,triggerpath,False,"PF",i) :
                                 passed = True
 				print "passes pf filter", event.offJet_csv[  event.pfJet_offmatch[i] ]
 				h_csv_afpf.Fill(				event.offJet_csv[ event.pfJet_offmatch[i] ] )
